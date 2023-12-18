@@ -1,0 +1,69 @@
+
+//+------------------------------------------------------------------+
+//|                                              Market Screener.mq5 |
+//|                            Copyright (C) 2021, Forex Robot Easy Team |
+//|                                        https://www.forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+//--- input parameters
+input int TimeFrame = PERIOD_H1; // Timeframe for analysis
+input ENUM_SYMBOL_INFO_INTEGER Inst = SYMBOL_INFO_POINT; // Instrument for trading
+input double OverboughtLevel = 70; // Level for identifying overbought assets
+input double OversoldLevel = 30; // Level for identifying oversold assets
+
+//--- global variables
+datetime lastCheckTime = 0; // Last time the market was checked
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    //--- set the necessary indicators or initialize any required variables
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    //--- clean up any resources used by the expert
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    //--- check if enough time has passed since the last market check
+    if (TimeCurrent() - lastCheckTime < 60) // Check every 60 seconds
+        return;
+
+    //--- perform the market scan for overbought or oversold assets
+    double currentPrice = SymbolInfoDouble(_Symbol, Inst);
+    double currentRsi = iRSI(_Symbol, TimeFrame, 14, PRICE_CLOSE, 0);
+    
+    //--- check if asset is overbought
+    if (currentRsi >= OverboughtLevel)
+    {
+        //--- perform actions for overbought asset
+        //...
+        //...
+
+        Print('Asset is overbought: ', _Symbol);
+    }
+    
+    //--- check if asset is oversold
+    if (currentRsi <= OversoldLevel)
+    {
+        //--- perform actions for oversold asset
+        //...
+        //...
+
+        Print('Asset is oversold: ', _Symbol);
+    }
+    
+    //--- update the last check time
+    lastCheckTime = TimeCurrent();
+}
